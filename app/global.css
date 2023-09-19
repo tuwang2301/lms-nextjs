@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    --color-bg: #f1f1f9c9;
+    --color-text: #393D3F;
+    --font-family: 'Roboto Slab', serif;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--color-bg);
+    color: var(--color-text);
+}
+
+a {
+    color: unset;
+    text-decoration: none;
+}
