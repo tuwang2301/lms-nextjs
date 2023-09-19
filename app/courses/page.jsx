@@ -9,14 +9,11 @@ import MultiSelectTeachers from '../../components/courses/MultiSelectTeachers';
 import MultiSelectSubjects from '../../components/courses/MultiSelectSubjects';
 import { apiGetMostEnrolledCourse } from '../../services/EnrollServices';
 import { displayDateFormat, valueDateFormat } from '../../constants/constants';
-import useSWR from 'swr';
-import axios from '../../services/customizeAxios'
+import { useMostEnrolledData } from '../../utils/hooks/useMostEnrolledData'
 
 const { RangePicker } = DatePicker;
 
 const { Search } = Input;
-
-const fetcher = url => axios.get(url).then(res => res.data)
 
 const Courses = () => {
 
@@ -29,11 +26,8 @@ const Courses = () => {
     const [teacherIds, setTeacherIds] = useState([]);
     const [subjectIds, setSubjectIds] = useState([]);
 
-    const { data, error, isLoading } = useSWR('/enrollment/most-enrolled', fetcher, {
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false
-    });
+    const { data, isLoading } = useMostEnrolledData();
+
 
     useEffect(() => {
         try {

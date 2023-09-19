@@ -6,10 +6,10 @@ import dayjs from 'dayjs';
 import { UploadOutlined } from '@ant-design/icons';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
-import { storage } from '../../../firebase';
+import { storage } from '../../../app/firebase';
 import { apiCreateCourse, apiUpdateCourse } from '../../../services/CourseServices';
-import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
+import { useRouter } from 'next/navigation';
 
 
 const { RangePicker } = DatePicker
@@ -24,7 +24,7 @@ const UpdateCourseForm = ({ course, fetchCourses, onClose }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [uploadFile, setUploadFile] = useState(null);
     const [form] = Form.useForm();
-    const navigate = useNavigate();
+    const router = useRouter()
 
     useEffect(() => {
         const getAllSubjects = async () => {
@@ -92,7 +92,7 @@ const UpdateCourseForm = ({ course, fetchCourses, onClose }) => {
             message.success('Update successfully');
             onClose();
             fetchCourses();
-            navigate('/admin/courses');
+            router.push('/admin/courses');
         } else {
             setIsLoading(false);
             message.error(response.data);

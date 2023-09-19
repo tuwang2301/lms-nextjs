@@ -1,10 +1,11 @@
 'use client'
 import Link from 'next/link'
 import { Button, Form, Input, Modal, Spin, message } from 'antd';
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { apiLogin } from '../services/AuthServices'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { AuthContext } from '../utils/context/AuthProvider';
+import { useRouter } from 'next/navigation'
 
 const SignNav = () => {
     const [isOpenLogin, setIsOpenLogin] = useState(false)
@@ -12,6 +13,14 @@ const SignNav = () => {
     const [isLoading, setIsLoading] = useState(false);
     const { data: session } = useSession();
     const { auth, setAuth } = useContext(AuthContext);
+    const router = useRouter();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setAuth(null);
+        }
+    }, [])
 
     const onFinish = async (value) => {
         setIsLoading(true);
@@ -38,6 +47,7 @@ const SignNav = () => {
     const logout = () => {
         localStorage.clear();
         setAuth(null);
+        router.push('/')
         message.success('Logout successfully');
     }
 
