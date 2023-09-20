@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query'
 const MyCourses = () => {
 
     const { data, isLoading } = useQuery({
-        queryKey: 'enrolled-courses',
+        queryKey: 'enrolled_courses',
         queryFn: () => apiGetEnrolledCourse(),
     })
 
@@ -22,7 +22,7 @@ const MyCourses = () => {
                         <div className='flex flex-wrap justify-start w-full px-auto'>
                             {
                                 data?.data.length > 0 ?
-                                    data.data.map((course, index) => <div className='mx-5 my-10'><CourseBox data={course.course} key={index} enroll_date={course.enroll_date} /></div>)
+                                    data.data.map((course, index) => <div className='mx-5 my-10' key={index} ><CourseBox data={course.course} enroll_date={course.enroll_date} /></div>)
                                     :
                                     <Empty />
                             }

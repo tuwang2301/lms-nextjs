@@ -29,7 +29,7 @@ const MyCourses = () => {
                         <div className='flex flex-wrap justify-start w-full px-auto'>
                             {
                                 courses?.length > 0 ?
-                                    courses.map((course, index) => <div className='mx-5 my-10'><CourseBox data={course.course} key={index} enroll_date={course.enroll_date} /></div>)
+                                    courses.map((course, index) => <div className='mx-5 my-10' key={index}><CourseBox data={course.course} enroll_date={course.enroll_date} /></div>)
                                     :
                                     <Empty />
                             }

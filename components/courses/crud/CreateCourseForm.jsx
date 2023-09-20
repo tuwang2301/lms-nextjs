@@ -83,7 +83,7 @@ const CreateCourseForm = ({ onClose, fetchCourses }) => {
             form.resetFields();
             onClose();
             fetchCourses();
-            router.push('/admin/courses');
+            router.push('/admin/courses-management');
         } else {
             setIsLoading(false);
             message.error(response.data);

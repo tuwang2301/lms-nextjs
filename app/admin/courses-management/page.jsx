@@ -1,15 +1,15 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs';
-import { apiDeleteCourse, apiGetCourses } from '../../services/CourseServices';
+import { apiDeleteCourse, apiGetCourses } from '../../../services/CourseServices';
 import { Button, Modal, Pagination, Space, Table, message, DatePicker } from 'antd';
-import { showDeleteConfirm } from '../../components/deleteConfirm';
-import CreateCourseForm from '../../components/courses/crud/CreateCourseForm';
-import UpdateCourseForm from '../../components/courses/crud/UpdateCourseForm';
+import { showDeleteConfirm } from '../../../components/deleteConfirm';
+import CreateCourseForm from '../../../components/courses/crud/CreateCourseForm';
+import UpdateCourseForm from '../../../components/courses/crud/UpdateCourseForm';
 import Search from 'antd/es/input/Search';
-import MultiSelectSubjects from '../../components/courses/MultiSelectSubjects';
-import MultiSelectTeachers from '../../components/courses/MultiSelectTeachers';
-import { displayDateFormat } from '../../constants/constants';
+import MultiSelectSubjects from '../../../components/courses/MultiSelectSubjects';
+import MultiSelectTeachers from '../../../components/courses/MultiSelectTeachers';
+import { displayDateFormat } from '../../../constants/constants';
 
 const { RangePicker } = DatePicker;
 
@@ -26,7 +26,6 @@ const CoursesManagement = () => {
     const [pageSize, setPageSize] = useState(5);
     const [isOpenCreate, setIsOpenCreate] = useState(false);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
-
     const [updateCourse, setUpdateCourse] = useState();
 
     const fetchCourses = () => {
@@ -226,7 +225,7 @@ const CoursesManagement = () => {
                     onChange={handleChangeSearch}
                     placeholder="Search what you wanna learn"
                     allowClear
-                    className='w-1/2 mx-3'
+                    className='basis-1/2'
                 />
                 <RangePicker
                     onChange={handleOnchangeDate}

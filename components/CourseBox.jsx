@@ -1,4 +1,4 @@
-import { Button, Modal, Space, Spin, message } from 'antd';
+import { Button, Image, Modal, Space, Spin, message } from 'antd';
 import React, { useState } from 'react'
 import { apiEnrollCourse } from '../services/EnrollServices';
 import dayjs from 'dayjs';
@@ -31,7 +31,7 @@ const CourseDetail = ({ course, closeDetail }) => {
             <h1 className='text-4xl font-extrabold mb-5'>{course.name}</h1>
             <div className='flex'>
                 <div className='basis-1/2 rounded-xl overflow-hidden mx-2'>
-                    <img className='object-cover h-full' src={course.image}></img>
+                    <Image placeholder='blur' className='object-cover h-full' src={course.image}></Image>
                 </div>
                 <div className='basis-1/2 mx-2'>
                     <Space direction='vertical'>

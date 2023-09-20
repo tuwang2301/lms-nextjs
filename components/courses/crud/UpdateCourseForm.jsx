@@ -92,7 +92,7 @@ const UpdateCourseForm = ({ course, fetchCourses, onClose }) => {
             message.success('Update successfully');
             onClose();
             fetchCourses();
-            router.push('/admin/courses');
+            router.push('/admin/courses-management');
         } else {
             setIsLoading(false);
             message.error(response.data);

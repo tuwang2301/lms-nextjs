@@ -40,9 +40,10 @@ const NavBar = () => {
         ]
     } else if (auth?.roles?.includes(roles.admin)) {
         navLinks = [
+            ...navLinks,
             {
-                href: '/courses-management',
-                name: 'Courses'
+                href: '/admin/courses-management',
+                name: 'Courses-management'
             }
         ]
     }

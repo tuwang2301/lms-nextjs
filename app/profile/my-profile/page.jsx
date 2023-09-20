@@ -3,8 +3,6 @@ import React, { useContext, useState } from 'react'
 import ProfileLayout from '../../../components/ProfileLayout'
 import { Button, DatePicker, Form, Image, Input, Modal, Select, Space, Spin, Upload, message } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import { useQuery, useMutation } from '@tanstack/react-query'
-import { apiGetUserProfile } from '../../../services/UserServices'
 import { AuthContext } from '../../../utils/context/AuthProvider'
 import dayjs from 'dayjs'
 import { useUpdateStudent } from '../../../utils/hooks/useUpdateStudent'
@@ -119,84 +117,85 @@ const MyProfile = () => {
     }
 
     return (
-        <ProfileLayout>
-            <>
-                <h1 className='text-4xl font-semibold text-color-button mb-20' >My Profile</h1>
-                <div className='flex w-full items-center'>
-                    <div className='basis-2/5 flex flex-col items-center mx-3'>
+
+        <>
+            <h1 className='text-4xl font-semibold text-color-button mb-20' >My Profile</h1>
+            <div className='flex w-full items-center'>
+                <div className='basis-2/5 flex flex-col items-center mx-3'>
+                    <Image
+                        src={profile?.avatar}
+                        className='rounded-2xl'
+                        width={250}
+                    >
+                    </Image>
+                    <Button className='bg-color-button my-5' type='primary' onClick={() => { setIsOpenChangeAva(true) }}>Change Avatar</Button>
+                </div>
+                <Space size={'large'} direction='vertical' className='basis-3/5 w-full mx-3'>
+                    {profiles.map((p, i) => <div className='w-full border-b-2' key={i}>{p}</div>)}
+                    <div className='flex justify-center'>
+                        <Button className='bg-color-button' type='primary' onClick={() => { setIsOpenChangeProfile(true) }}>Edit Profile</Button>
+                    </div>
+                </Space>
+            </div>
+            <Modal title={'Change avatar'} open={isOpenChangeAva} onCancel={() => { setIsOpenChangeAva(false) }} footer={null}>
+                <div className='flex flex-col'>
+                    <div className='flex justify-center'>
                         <Image
-                            src={profile?.avatar}
-                            className='rounded-2xl'
+                            src={url || profile?.avatar}
+                            className='rounded-2xl my-5 mx-auto'
                             width={250}
+                            placeholder='blur'
                         >
                         </Image>
-                        <Button className='bg-color-button my-5' type='primary' onClick={() => { setIsOpenChangeAva(true) }}>Change Avatar</Button>
                     </div>
-                    <Space size={'large'} direction='vertical' className='basis-3/5 w-full mx-3'>
-                        {profiles.map((p, i) => <div className='w-full border-b-2' key={i}>{p}</div>)}
-                        <div className='flex justify-center'>
-                            <Button className='bg-color-button' type='primary' onClick={() => { setIsOpenChangeProfile(true) }}>Edit Profile</Button>
-                        </div>
-                    </Space>
-                </div>
-                <Modal title={'Change avatar'} open={isOpenChangeAva} onCancel={() => { setIsOpenChangeAva(false) }} footer={null}>
-                    <div className='flex flex-col'>
-                        <div className='flex justify-center'>
-                            <Image
-                                src={url || profile?.avatar}
-                                className='rounded-2xl my-5 mx-auto'
-                                width={250}
-                            >
-                            </Image>
-                        </div>
 
-                        <Upload
-                            maxCount={1}
-                            beforeUpload={beforeUpload}
-                            accept={'.png,.jpg'}
-                            onChange={onChangeImage}
-                            className='mb-5'
-                        >
-                            <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                        </Upload>
-                        <Button
-                            type={!isLoading && 'primary'}
-                            className={!isLoading && 'bg-color-button'}
-                            onClick={handleChangeAvatar}
-                            size='large'
-                        >
-                            {isLoading ? <Spin /> : 'Change Avatar'}
-                        </Button>
-                    </div>
-                </Modal>
-                <Modal title='Edit Profile' open={isOpenChangeProfile} onCancel={() => { setIsOpenChangeProfile(false) }} footer={null}>
-                    <Form
-                        onFinish={onFinish}
-                        style={{
-                            maxWidth: 600,
-                        }}
-                        layout="vertical"
+                    <Upload
+                        maxCount={1}
+                        beforeUpload={beforeUpload}
+                        accept={'.png,.jpg'}
+                        onChange={onChangeImage}
+                        className='mb-5'
                     >
-                        <Form.Item
-                            hasFeedback
-                            label="Full Name"
-                            name="full_name"
-                            validateTrigger="onBlur"
-                            rules={[
-                                {
-                                    pattern: /^[A-Za-z]+(?: [A-Za-z]+)*$/,
-                                    message: 'Please enter your real full name',
-                                },
-                                {
-                                    required: true,
-                                }
-                            ]}
-                            initialValue={profile?.full_name}
-                        >
-                            <Input placeholder="Example: Nguyen Quang Tu" />
-                        </Form.Item>
+                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                    </Upload>
+                    <Button
+                        type={!isLoading && 'primary'}
+                        className={!isLoading && 'bg-color-button'}
+                        onClick={handleChangeAvatar}
+                        size='large'
+                    >
+                        {isLoading ? <Spin /> : 'Change Avatar'}
+                    </Button>
+                </div>
+            </Modal>
+            <Modal title='Edit Profile' open={isOpenChangeProfile} onCancel={() => { setIsOpenChangeProfile(false) }} footer={null}>
+                <Form
+                    onFinish={onFinish}
+                    style={{
+                        maxWidth: 600,
+                    }}
+                    layout="vertical"
+                >
+                    <Form.Item
+                        hasFeedback
+                        label="Full Name"
+                        name="full_name"
+                        validateTrigger="onBlur"
+                        rules={[
+                            {
+                                pattern: /^[A-Za-z]+(?: [A-Za-z]+)*$/,
+                                message: 'Please enter your real full name',
+                            },
+                            {
+                                required: true,
+                            }
+                        ]}
+                        initialValue={profile?.full_name}
+                    >
+                        <Input placeholder="Example: Nguyen Quang Tu" />
+                    </Form.Item>
 
-                        {/* <Form.Item
+                    {/* <Form.Item
                         hasFeedback
                         label="Email"
                         name="email"
@@ -215,59 +214,58 @@ const MyProfile = () => {
                         <Input placeholder="Example: quangtu2301@gmail.com" />
                     </Form.Item> */}
 
-                        <Form.Item
-                            hasFeedback
-                            label="Gender"
-                            name="gender"
-                            validateTrigger="onBlur"
-                            rules={[
-                                {
-                                    required: true,
-                                }
+                    <Form.Item
+                        hasFeedback
+                        label="Gender"
+                        name="gender"
+                        validateTrigger="onBlur"
+                        rules={[
+                            {
+                                required: true,
+                            }
+                        ]}
+                        initialValue={profile?.gender}
+                    >
+                        <Select
+                            style={{ width: 120 }}
+                            options={[
+                                { value: 'Male', label: 'Male' },
+                                { value: 'Female', label: 'Female' },
+                                { value: 'Unknown', label: 'Unknown' }
                             ]}
-                            initialValue={profile?.gender}
-                        >
-                            <Select
-                                style={{ width: 120 }}
-                                options={[
-                                    { value: 'Male', label: 'Male' },
-                                    { value: 'Female', label: 'Female' },
-                                    { value: 'Unknown', label: 'Unknown' }
-                                ]}
-                            />
-                        </Form.Item>
+                        />
+                    </Form.Item>
 
-                        <Form.Item
-                            hasFeedback
-                            label="Date of Birth"
-                            name="dob"
-                            validateTrigger="onBlur"
-                            initialValue={dayjs(profile?.dob)}
-                        >
-                            <DatePicker onChange={validateDate} />
-                        </Form.Item>
+                    <Form.Item
+                        hasFeedback
+                        label="Date of Birth"
+                        name="dob"
+                        validateTrigger="onBlur"
+                        initialValue={dayjs(profile?.dob)}
+                    >
+                        <DatePicker onChange={validateDate} />
+                    </Form.Item>
 
-                        <Form.Item
-                            hasFeedback
-                            label="Address"
-                            name="address"
-                            validateTrigger="onBlur"
-                            initialValue={profile?.address}
-                        >
-                            <Input placeholder="Example: Cau Giay, Ha noi" />
-                        </Form.Item>
+                    <Form.Item
+                        hasFeedback
+                        label="Address"
+                        name="address"
+                        validateTrigger="onBlur"
+                        initialValue={profile?.address}
+                    >
+                        <Input placeholder="Example: Cau Giay, Ha noi" />
+                    </Form.Item>
 
-                        <Form.Item className='flex justify-end' >
-                            <Space>
-                                <Button htmlType="submit" loading={loadingChange} type='primary' className='bg-color-button'>
-                                    Submit
-                                </Button>
-                            </Space>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            </>
-        </ProfileLayout>
+                    <Form.Item className='flex justify-end' >
+                        <Space>
+                            <Button htmlType="submit" loading={loadingChange} type='primary' className='bg-color-button'>
+                                Submit
+                            </Button>
+                        </Space>
+                    </Form.Item>
+                </Form>
+            </Modal>
+        </>
     )
 }
 

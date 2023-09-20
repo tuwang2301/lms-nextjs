@@ -1,6 +1,6 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { Input, Modal, Pagination, Space } from 'antd';
+import React, { useContext, useEffect, useState } from 'react'
+import { Input, Modal, Pagination, Space, message } from 'antd';
 import CourseBox from '../../components/CourseBox';
 import { apiGetCourses } from '../../services/CourseServices';
 import dayjs from 'dayjs';
@@ -10,6 +10,8 @@ import MultiSelectSubjects from '../../components/courses/MultiSelectSubjects';
 import { apiGetMostEnrolledCourse } from '../../services/EnrollServices';
 import { displayDateFormat, valueDateFormat } from '../../constants/constants';
 import { useMostEnrolledData } from '../../utils/hooks/useMostEnrolledData'
+import { AuthContext } from '../../utils/context/AuthProvider';
+import { useRouter } from 'next/navigation';
 
 const { RangePicker } = DatePicker;
 
@@ -25,8 +27,14 @@ const Courses = () => {
     const [endDate, setEndDate] = useState(null);
     const [teacherIds, setTeacherIds] = useState([]);
     const [subjectIds, setSubjectIds] = useState([]);
-
     const { data, isLoading } = useMostEnrolledData();
+    const { auth } = useContext(AuthContext);
+    const router = useRouter()
+
+    if (!auth) {
+        message.error('You have to login first')
+        router.push('/')
+    }
 
 
     useEffect(() => {
