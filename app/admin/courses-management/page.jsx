@@ -6,18 +6,19 @@ import { Button, Modal, Pagination, Space, Table, message, DatePicker } from 'an
 import { showDeleteConfirm } from '../../../components/deleteConfirm';
 import CreateCourseForm from '../../../components/courses/crud/CreateCourseForm';
 import UpdateCourseForm from '../../../components/courses/crud/UpdateCourseForm';
+import ScheduleCourse from '../../../components/courses/ScheduleCourse';
+
 import Search from 'antd/es/input/Search';
 import MultiSelectSubjects from '../../../components/courses/MultiSelectSubjects';
 import MultiSelectTeachers from '../../../components/courses/MultiSelectTeachers';
 import { displayDateFormat } from '../../../constants/constants';
+import { useQuery } from '@tanstack/react-query';
 
 const { RangePicker } = DatePicker;
 
 const CoursesManagement = () => {
 
-    const [courses, setCourses] = useState([]);
     const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
     const [search, setSearch] = useState('');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -26,31 +27,21 @@ const CoursesManagement = () => {
     const [pageSize, setPageSize] = useState(5);
     const [isOpenCreate, setIsOpenCreate] = useState(false);
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
+    const [isOpenSchedule, setIsOpenSchedule] = useState(false);
     const [updateCourse, setUpdateCourse] = useState();
+    const [scheduleCourse, setScheduleCourse] = useState();
 
-    const fetchCourses = () => {
-        apiGetCourses('DESC', page, pageSize, search, startDate, endDate, teacherIds, subjectIds)
-            .then((coursesResponse) => {
-                const meta = coursesResponse.data.meta;
-                setTotal(meta.itemCount);
-                setCourses(coursesResponse.data.data);
-            })
-            .catch((error) => {
-                message.error(error);
-                return;
-            })
-    }
+    const { data: courseResponse, refetch } = useQuery({
+        queryKey: ['courses-management', page, pageSize, search, startDate, endDate, teacherIds, subjectIds],
+        queryFn: () => apiGetCourses('DESC', page, pageSize, search, startDate, endDate, teacherIds, subjectIds),
+        select: (data) => data.data
+    })
 
-    useEffect(() => {
+    console.log(courseResponse);
 
-        try {
-            fetchCourses();
-        }
-        catch (e) {
-            message.error(e + '');
-        }
-        return () => { }
-    }, [pageSize, page, search, startDate, endDate, teacherIds, subjectIds]);
+    const total = courseResponse?.meta.itemCount;
+    const courses = courseResponse?.data;
+
 
     const columns = [
         {
@@ -121,20 +112,35 @@ const CoursesManagement = () => {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
-                <Space>
+                <Space direction='vertical'>
                     <Button
                         onClick={() => { handleEditCourse({ record }) }}
                         type='default'
-                    >Edit</Button>
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        onClick={() => { schedule(record) }}
+                        type='dashed'
+                    >
+                        Schedule
+                    </Button>
                     <Button
                         onClick={() => { deleteConfirmCourse(record) }}
                         danger
-                    >Delete</Button>
+                    >
+                        Delete
+                    </Button>
                 </Space>
             ),
-            width: 200
         },
     ];
+
+    const schedule = (record) => {
+        console.log(record.timetables);
+        setScheduleCourse(record);
+        setIsOpenSchedule(true);
+    }
 
     const handleEditCourse = (record) => {
         setIsOpenUpdate(true)
@@ -158,7 +164,7 @@ const CoursesManagement = () => {
             } else {
                 message.error('Delete fail!');
             }
-            fetchCourses();
+            refetch();
         }
         showDeleteConfirm('Do you want to delete this course?', content, handleDelete)
     }
@@ -262,12 +268,17 @@ const CoursesManagement = () => {
                 </div>
                 <Modal style={{ top: 50 }} footer={null} title={'Create New Course'} open={isOpenCreate} onCancel={() => { setIsOpenCreate(false) }}>
                     <div>
-                        <CreateCourseForm fetchCourses={fetchCourses} onClose={() => { setIsOpenCreate(false) }} />
+                        <CreateCourseForm fetchCourses={refetch} onClose={() => { setIsOpenCreate(false) }} />
                     </div>
                 </Modal>
                 <Modal destroyOnClose={true} style={{ top: 50 }} footer={null} title={'Update Course'} open={isOpenUpdate} onCancel={() => { setIsOpenUpdate(false) }}>
                     <div>
-                        <UpdateCourseForm fetchCourses={fetchCourses} course={updateCourse} onClose={() => { setIsOpenUpdate(false) }} />
+                        <UpdateCourseForm fetchCourses={refetch} course={updateCourse} onClose={() => { setIsOpenUpdate(false) }} />
+                    </div>
+                </Modal>
+                <Modal destroyOnClose={true} style={{ top: 50 }} footer={null} title={'Schedule Course'} open={isOpenSchedule} onCancel={() => { setIsOpenSchedule(false) }}>
+                    <div>
+                        <ScheduleCourse course={scheduleCourse} onClose={() => { setIsOpenSchedule(false) }} />
                     </div>
                 </Modal>
             </div>

@@ -2,10 +2,10 @@ import { Button, Image, Modal, Space, Spin, message } from 'antd';
 import React, { useState } from 'react'
 import dayjs from 'dayjs';
 import { displayDateFormat } from '../constants/constants';
-import CourseDetail from './CourseDetail'
+import CourseDetail from './CourseDetail';
 
 
-const CourseBox = ({ data, enroll_date }) => {
+const CourseBoxMini = ({ data, enroll_date }) => {
     const [isOpenDetail, setIsOpenDetail] = useState(false);
 
     const course = {
@@ -19,6 +19,7 @@ const CourseBox = ({ data, enroll_date }) => {
         setIsOpenDetail(true);
     }
 
+
     if (course !== undefined) {
         return (
             <>
@@ -26,34 +27,22 @@ const CourseBox = ({ data, enroll_date }) => {
                     className='
                     rounded-lg
                     shadow-xl
-                    w-72
+                    w-fit
+                    mx-3
                     overflow-hidden
                     hover:cursor-pointer
-                    hover:w-80
+                    bg-slate-50
                     hover:bg-color-button
                     hover:text-gray-100
                     hover:transition-all
                     blur: transition-all'
                     onClick={openDetail}
                 >
-                    <div>
-                        <img className='w-full h-44 object-cover' src={course.image}></img>
+                    <div className='flex flex-col justify-center px-3 py-4'>
+                        <p className='font-bold'>{course.name}</p>
+                        <p>{course.subject.name ?? 'Khong co'}</p>
+                        <i>{course.teacher?.full_name ?? 'None'}</i>
                     </div>
-                    <div className='flex flex-col justify-center pt-3 ps-3 pb-4'>
-                        <a href='#' className='font-bold text-lg'>{course.name}</a>
-                        <p>{course.subject.name ?? 'Khong co'} - {course.teacher?.full_name ?? 'None'}</p>
-                        <i>{course.startAt} - {course.endAt}</i>
-                    </div>
-                    {
-                        enroll_date &&
-                        <div className='flex justify-center border-t-2 py-2'>
-                            <b>
-                                Enrolled:  {dayjs(enroll_date).format(displayDateFormat)}
-                            </b>
-
-                        </div>
-                    }
-
                 </div >
                 <Modal open={isOpenDetail} onCancel={() => { setIsOpenDetail(false) }} footer={null} width={800}>
                     <CourseDetail course={course} closeDetail={() => { setIsOpenDetail(false) }} enrolled={!!enroll_date} />
@@ -64,4 +53,4 @@ const CourseBox = ({ data, enroll_date }) => {
     }
 }
 
-export default CourseBox
+export default CourseBoxMini

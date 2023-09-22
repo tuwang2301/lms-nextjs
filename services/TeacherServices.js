@@ -18,4 +18,8 @@ const apiGetAllTeachers = () => {
     return axios.get('/teacher/all-teachers');
 }
 
-export { apiGetTeachers, apiGetAllTeachers }
+const apiGetCoursesOfTeacher = (id) => {
+    return axios.get(`/teacher/courses/${id}`);
+}
+
+export { apiGetTeachers, apiGetAllTeachers, apiGetCoursesOfTeacher }

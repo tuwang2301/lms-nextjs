@@ -34,8 +34,12 @@ const NavBar = () => {
         navLinks = [
             ...navLinks,
             {
-                href: '/my-courses',
+                href: '/student/my-courses',
                 name: 'My Courses'
+            },
+            {
+                href: '/student/my-timetable',
+                name: 'My Timetable'
             }
         ]
     } else if (auth?.roles?.includes(roles.admin)) {
@@ -44,6 +48,18 @@ const NavBar = () => {
             {
                 href: '/admin/courses-management',
                 name: 'Courses-management'
+            }
+        ]
+    } else if (auth?.roles?.includes(roles.teacher)) {
+        navLinks = [
+            ...navLinks,
+            {
+                href: '/teacher/my-courses',
+                name: 'My Courses'
+            },
+            {
+                href: '/teacher/my-timetable',
+                name: 'My Timetable'
             }
         ]
     }

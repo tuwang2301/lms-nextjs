@@ -5,3 +5,6 @@ export const roles = {
     teacher: 'teacher',
     student: 'student'
 }
+
+export const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+export const timeframes = ['8:00-10:00', '14:00-16:00', '16:00-18:00', '18:00-20:00'];

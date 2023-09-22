@@ -4,14 +4,14 @@ import { AuthContext } from '../../utils/context/AuthProvider'
 import { redirect, useRouter } from 'next/navigation';
 import { message } from 'antd';
 
-const AdminTemplate = ({ children }) => {
+const teacherTemplate = ({ children }) => {
     const { auth } = useContext(AuthContext);
     const router = useRouter();
     if (!auth) {
         router.push('/');
         message.error('You have to login first');
     } else {
-        if (!auth.roles?.includes('admin')) {
+        if (!auth.roles?.includes('teacher')) {
             redirect('/error/403')
         }
     }
@@ -21,4 +21,4 @@ const AdminTemplate = ({ children }) => {
     )
 }
 
-export default AdminTemplate
+export default teacherTemplate

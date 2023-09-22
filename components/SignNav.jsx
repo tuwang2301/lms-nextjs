@@ -6,33 +6,40 @@ import { apiLogin } from '../services/AuthServices'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { AuthContext } from '../utils/context/AuthProvider';
 import { useRouter } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query';
+import { useProfileData } from '../utils/hooks/useProfileData';
+import { apiGetUserProfile } from '../services/UserServices';
 
 const SignNav = () => {
     const [isOpenLogin, setIsOpenLogin] = useState(false)
     const [isOpenRegister, setIsOpenRegister] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
-    const { data: session } = useSession();
     const { auth, setAuth } = useContext(AuthContext);
     const router = useRouter();
 
+
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
+        if (!auth?.userId) {
             setAuth(null);
+            localStorage.clear();
         }
     }, [])
+
 
     const onFinish = async (value) => {
         setIsLoading(true);
         const response = await apiLogin(value.username, value.password);
         setIsLoading(false);
-        console.log(response);
         if (response.success) {
             message.success('Log in successfully');
             localStorage.setItem('token', response.data.access_token);
             const userId = response.data.user.id;
             const roles = response.data.user.roles.map(role => role.authority);
-            setAuth({ userId, roles });
+            const userResponse = await apiGetUserProfile(userId);
+            const user = userResponse.data;
+            const profile = user?.teacher || user?.student
+            console.log(profile);
+            setAuth({ userId, user, roles, profile });
             setIsOpenLogin(false);
         } else {
             message.error(response.data)
@@ -58,7 +65,7 @@ const SignNav = () => {
         </>
     )
 
-    if (auth) {
+    if (auth?.userId) {
         sign = (
             <>
                 <Link className='mx-5' href={'/profile/my-profile'}>My Profile</Link>

@@ -1,16 +1,16 @@
 'use client'
 import React, { useContext, useEffect, useState } from 'react'
-import { apiGetEnrolledCourse } from '../../services/EnrollServices';
+import { apiGetEnrolledCourse } from '../../../services/EnrollServices';
 import { Empty, Spin } from 'antd';
-import CourseBox from '../../components/CourseBox';
-import { AuthContext } from '../../utils/context/AuthProvider'
+import CourseBox from '../../../components/CourseBox';
+import { AuthContext } from '../../../utils/context/AuthProvider'
 import { useQuery } from '@tanstack/react-query'
 
 const MyCourses = () => {
 
     const { data, isLoading } = useQuery({
-        queryKey: 'enrolled_courses',
-        queryFn: () => apiGetEnrolledCourse(),
+        queryKey: ['enrolled_courses'],
+        queryFn: apiGetEnrolledCourse,
     })
 
     return (

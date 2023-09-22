@@ -4,7 +4,6 @@ import { apiGetUserProfile } from '../../services/UserServices'
 export const useProfileData = ({ auth }) => {
     return useQuery({
         queryKey: ['profile'],
-        queryFn: () => apiGetUserProfile(auth?.userId),
-        enabled: !!auth,
+        queryFn: () => apiGetUserProfile(auth.userId),
     })
 }

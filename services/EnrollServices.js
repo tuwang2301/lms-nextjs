@@ -7,14 +7,18 @@ const apiGetMostEnrolledCourse = () => {
 
 const apiEnrollCourse = (id) => {
     try {
-        return axios.post(`/enrollment/enroll/${id}`)
+        return axios.post(`/enrollment/enroll/${id}`);
     } catch (e) {
         throw e;
     }
 }
 
 const apiUnenrollCourse = (id) => {
-    return axios.delete(`/enrollment/uneroll/${id}`)
+    try {
+        return axios.delete(`/enrollment/unenroll/${id}`)
+    } catch (e) {
+        throw e;
+    }
 }
 
 const apiGetEnrolledCourse = () => {

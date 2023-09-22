@@ -18,11 +18,12 @@ const MyProfile = () => {
     const [uploadFile, setUploadFile] = useState();
     const { auth } = useContext(AuthContext)
 
-    const { data, isLoading: profileLoading, error, refetch } = useProfileData({ auth: auth })
+    const { data, isLoading: profileLoading, error, refetch } = useProfileData({ auth })
     const profile = data?.data.student ?? data?.data.teacher;
 
     let onSuccess = () => {
         message.success('Edit successfully');
+        refetch();
         setIsOpenChangeProfile(false);
     }
 

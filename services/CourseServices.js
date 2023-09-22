@@ -2,9 +2,6 @@
 import axios from "./customizeAxios";
 
 const apiGetCourses = (order = 'ASC', page = 1, take = 4, name, start_at, end_at, teachers_id, subjects_id) => {
-
-    console.log('Teacher id' + teachers_id);
-    console.log('subjectIds' + subjects_id);
     return axios.get('/course', {
         params: {
             order,

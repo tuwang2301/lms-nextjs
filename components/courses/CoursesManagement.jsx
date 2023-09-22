@@ -10,6 +10,7 @@ import UpdateCourseForm from './crud/UpdateCourseForm';
 import Search from 'antd/es/input/Search';
 import MultiSelectSubjects from '../../components/MultiSelectSubjects';
 import MultiSelectTeachers from '../../components/MultiSelectTeachers';
+import { useQuery } from '@tanstack/react-query';
 
 const { RangePicker } = DatePicker;
 
@@ -28,6 +29,13 @@ const CoursesManagement = () => {
     const [isOpenUpdate, setIsOpenUpdate] = useState(false);
 
     const [updateCourse, setUpdateCourse] = useState();
+
+    const { data: courseResponse, refetch } = useQuery({
+        queryKey: ['courses-management', page, pageSize, search, startDate, endDate, teacherIds, subjectIds],
+        queryFn: () => apiGetCourses('DESC', page, pageSize, search, startDate, endDate, teacherIds, subjectIds)
+    })
+
+    console.log(courseResponse);
 
     const fetchCourses = () => {
         apiGetCourses('DESC', page, pageSize, search, startDate, endDate, teacherIds, subjectIds)
