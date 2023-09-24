@@ -1,6 +1,6 @@
 'use client'
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { Button, Space, message } from "antd"
+import { Button, Space, Spin, message } from "antd"
 import { apiEnrollCourse, apiUnenrollCourse } from "../services/EnrollServices"
 
 const CourseDetail = ({ course, closeDetail, enrolled }) => {
