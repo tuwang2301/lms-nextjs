@@ -3,13 +3,14 @@ import Link from "next/link"
 import Logo from './Logo'
 import { Navigation } from "./Navigation"
 import SignNav from './SignNav'
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { AuthContext } from "../utils/context/AuthProvider"
 import { roles } from "../constants/constants"
-
+import Notification from './Notification'
 
 
 const NavBar = () => {
+
     let navLinks = [
         {
             href: '/',
@@ -67,6 +68,7 @@ const NavBar = () => {
     return (
         <header className='w-full mb-16'>
             <nav className='max-w-[1440px] mx-auto flex justify-between items-center sm:px-16 px-6 py-4'>
+                <Notification />
                 <Link href='/'>
                     <Logo />
                 </Link>

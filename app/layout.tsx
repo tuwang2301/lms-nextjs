@@ -12,6 +12,7 @@ import SessionProvider from '../components/SessionProvider'
 import { QueryClient } from '@tanstack/react-query'
 import QueryClientProvider from './ReactQueryProvider'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import "react-toastify/ReactToastify.css";
 
 const roboto = Roboto_Slab({ subsets: ['vietnamese'], weight: ['100', '400', '600', '800'] })
 
