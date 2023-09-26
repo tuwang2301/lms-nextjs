@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from 'firebase/storage';
-import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
@@ -15,7 +14,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 export const storage = getStorage(app)
 export const messaging = getMessaging(app)
 
@@ -31,6 +29,7 @@ export const requestPermission = () => {
             })
                 .then(currentToken => {
                     if (currentToken) {
+                        localStorage.setItem('client_token', currentToken);
                         console.log('Client token: ', currentToken);
                     } else {
                         console.log('Failed to generate the app registration token.');
@@ -46,8 +45,6 @@ export const requestPermission = () => {
         }
     });
 };
-
-requestPermission();
 
 export const onMessageListener = () =>
     new Promise(

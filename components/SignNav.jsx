@@ -28,7 +28,8 @@ const SignNav = () => {
 
     const onFinish = async (value) => {
         setIsLoading(true);
-        const response = await apiLogin(value.username, value.password);
+        const client_token = localStorage.getItem('client_token')
+        const response = await apiLogin({ username: value.username, password: value.password, client_token });
         setIsLoading(false);
         if (response.success) {
             message.success('Log in successfully');

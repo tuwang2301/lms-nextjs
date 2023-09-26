@@ -1,51 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import { onMessageListener, requestPermission } from '../app/firebase';
-import { ToastContainer, toast } from 'react-toastify';
+import React, { useState, useEffect } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
+import { requestPermission, onMessageListener } from '../app/firebase';
 
 const Notification = () => {
-    const [notification, setNotification] = useState({ title: '', body: '' });
+    const [notification, setNotification] = useState({ title: '', body: '', img: '' });
+    const notify = () => toast(<ToastDisplay />);
+    function ToastDisplay() {
+        return (
+            <div className='display flex justify-between'>
+                <img className='w-20 me-3' src={notification.img} />
+                <div>
+                    <p><b>{notification?.title}</b></p>
+                    <p>{notification?.body}</p>
+                </div>
+            </div>
+        );
+    };
 
     useEffect(() => {
-        requestPermission();
-
-        const unsubcrice = onMessageListener().then(payload => {
-            setNotification({
-                title: payload?.notification?.title,
-                body: payload?.notification?.body
-            });
-            toast(`🦄 ${payload?.notification?.title}`, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        });
-
-        return () => {
-            unsubcrice.catch(error => console.log('failed: ', error));
+        if (notification?.title) {
+            notify()
         }
-    }, [])
+    }, [notification])
+
+    requestPermission();
+
+    onMessageListener()
+        .then((payload) => {
+            setNotification({ title: payload?.notification?.title, body: payload?.notification?.body, img: payload?.notification?.image });
+        })
+        .catch((err) => console.log('failed: ', err));
+
     return (
-        <div>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-            {/* Same as */}
-            <ToastContainer />
-        </div>
+        <Toaster />
     )
 }
 
